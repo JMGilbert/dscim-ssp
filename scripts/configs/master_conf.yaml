@@ -1,0 +1,65 @@
+mortality_version: 0
+coastal_version: "0.22"
+
+AR6_ssp_climate:
+  gases:
+    - CO2_Fossil
+  gmst_path: None
+  gmsl_path: None
+  gmst_fair_path: ./inputs/climate/ar6_fair162_sim_and_medianparams_control_pulse_2020-2030-2040-2050-2060-2070-2080_emis_conc_rf_temp_lambdaeff_emissions-driven_naturalfix_v4.0.nc
+  gmsl_fair_path: ./inputs/climate/gmsl_pulse_fixed.nc4
+  damages_pulse_conversion_path: ./inputs/climate/conversion_v5.02_Jan222022.nc4
+  ecs_mask_path: None
+  emission_scenarios:
+    - ssp245
+    - ssp460
+    - ssp370
+    - ssp585
+    
+econdata:
+  global_ssp: ./inputs/econ/integration-econ-bc39.zarr
+  USA_ssp: ./inputs/econ/integration-econ-bc39_USA.zarr
+  
+paths:
+  reduced_damages_library: None
+  ssp_damage_function_library: ./inputs/damage_functions
+  AR6_ssp_results: None
+
+
+sectors:
+  coastal_v0.22:
+    formula: damages ~ -1 + gmsl + np.power(gmsl, 2)
+    
+  agriculture:
+    formula: damages ~ -1 + anomaly + np.power(anomaly, 2)
+  
+  mortality_v0:
+    formula: damages ~ -1 + anomaly + np.power(anomaly, 2)
+    
+  energy:
+    formula: damages ~ -1 + anomaly + np.power(anomaly, 2)
+
+  labor:
+    formula: damages ~ -1 + anomaly + np.power(anomaly, 2)
+  
+  CAMEL_m0_c0.22:
+    formula: damages ~ -1 + anomaly + np.power(anomaly, 2) + gmsl + np.power(gmsl, 2)
+
+    
+global_parameters:
+  subset_dict:
+    ssp:
+      - SSP2
+    model:
+      - IIASA GDP
+  fair_aggregation:
+    - ce
+    - median
+    - mean
+    - gwr_mean
+    - median_params
+  discrete_discounting: False
+  weitzman_parameter:
+    - 0.1
+
+save_path: ./out/
